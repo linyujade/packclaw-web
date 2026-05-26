@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PackClaw — OpenClaw 极简安装包，开箱即用</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050810;
+  --bg2: #0b0f1e;
+  --bg3: #111828;
+  --card: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(99,179,237,0.35);
+  --text: #f0f4ff;
+  --text2: #8899bb;
+  --text3: #4a5a78;
+  --accent: #3b82f6;
+  --accent2: #60a5fa;
+  --accent-glow: rgba(59,130,246,0.15);
+  --cyan: #22d3ee;
+  --cyan-glow: rgba(34,211,238,0.12);
+  --gold: #fbbf24;
+  --green: #34d399;
+  --purple: #a78bfa;
+  --red: #f87171;
+  --font-display: 'Sora', sans-serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ───── NOISE TEXTURE ───── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ───── AMBIENT BLOBS ───── */
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  animation: blobFloat 12s ease-in-out infinite alternate;
+}
+.blob-1 { width: 600px; height: 600px; background: rgba(59,130,246,0.07); top: -200px; left: -150px; animation-delay: 0s; }
+.blob-2 { width: 500px; height: 500px; background: rgba(34,211,238,0.05); top: 30%; right: -200px; animation-delay: -4s; }
+.blob-3 { width: 400px; height: 400px; background: rgba(167,139,250,0.06); bottom: 10%; left: 20%; animation-delay: -8s; }
+
+@keyframes blobFloat {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(30px, 40px) scale(1.08); }
+}
+
+/* ───── NAV ───── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(5,8,16,0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 0 20px rgba(59,130,246,0.4);
+}
+
+nav ul { list-style: none; display: flex; gap: 32px; }
+nav ul a { color: var(--text2); text-decoration: none; font-size: 14px; transition: color .2s; }
+nav ul a:hover { color: var(--text); }
+
+.nav-cta {
+  background: linear-gradient(135deg, var(--accent), #2563eb);
+  color: #fff !important;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: opacity .2s, box-shadow .2s !important;
+  box-shadow: 0 0 16px rgba(59,130,246,0.3);
+}
+.nav-cta:hover { opacity: 0.9 !important; box-shadow: 0 0 24px rgba(59,130,246,0.5) !important; }
+
+/* ───── SECTIONS ───── */
+section { position: relative; z-index: 1; }
+
+/* ───── HERO ───── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.25);
+  border-radius: 100px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--accent2);
+  margin-bottom: 32px;
+  animation: fadeUp .8s ease both;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(0.8)} }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -2px;
+  margin-bottom: 12px;
+  animation: fadeUp .8s ease .1s both;
+}
+
+.hero h1 .pack { color: var(--text); }
+.hero h1 .claw {
+  background: linear-gradient(135deg, var(--accent2), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 300;
+  color: var(--text2);
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+  animation: fadeUp .8s ease .2s both;
+}
+
+.hero-sub {
+  max-width: 600px;
+  color: var(--text2);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 48px;
+  animation: fadeUp .8s ease .3s both;
+}
+
+.hero-sub strong { color: var(--cyan); font-weight: 500; }
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp .8s ease .4s both;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--accent), #1d4ed8);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 0 40px rgba(59,130,246,0.3), 0 4px 20px rgba(0,0,0,0.3);
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 60px rgba(59,130,246,0.45), 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text2);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .25s;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--text);
+  background: rgba(255,255,255,0.03);
+}
+
+/* OS Badges */
+.os-badges {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  justify-content: center;
+  animation: fadeUp .8s ease .5s both;
+}
+
+.os-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text2);
+  font-family: var(--font-mono);
+}
+
+.os-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+.os-badge.mac .dot { background: #a8d8ff; }
+.os-badge.win .dot { background: #60cdff; }
+
+/* Hero visual */
+.hero-visual {
+  margin-top: 72px;
+  width: 100%;
+  max-width: 900px;
+  animation: fadeUp .8s ease .6s both;
+}
+
+.terminal {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 80px rgba(59,130,246,0.08);
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+.terminal-dot.r { background: #ff5f57; }
+.terminal-dot.y { background: #febc2e; }
+.terminal-dot.g { background: #28c840; }
+
+.terminal-title { flex: 1; text-align: center; font-family: var(--font-mono); font-size: 12px; color: var(--text3); }
+
+.terminal-body { padding: 24px 28px; text-align: left; }
+.terminal-body pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.9; }
+
+.t-dim { color: var(--text3); }
+.t-green { color: var(--green); }
+.t-cyan { color: var(--cyan); }
+.t-blue { color: #93c5fd; }
+.t-gold { color: var(--gold); }
+.t-purple { color: var(--purple); }
+.t-red { color: var(--red); }
+.t-white { color: var(--text); }
+
+.cursor {
+  display: inline-block;
+  width: 8px; height: 14px;
+  background: var(--cyan);
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ───── DIVIDER ───── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0;
+}
+
+/* ───── SECTION HEADER ───── */
+.section-header {
+  text-align: center;
+  padding: 100px 24px 60px;
+}
+
+.section-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1.12;
+  margin-bottom: 16px;
+}
+
+.section-desc {
+  color: var(--text2);
+  font-size: 17px;
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.75;
+}
+
+/* ───── STEPS ───── */
+.steps-section { padding: 0 24px 100px; }
+
+.steps-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.step-card {
+  background: var(--bg);
+  padding: 48px 36px;
+  position: relative;
+  transition: background .25s;
+}
+
+.step-card:hover { background: var(--bg2); }
+
+.step-num {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.step-icon { font-size: 32px; margin-bottom: 16px; }
+.step-title { font-family: var(--font-display); font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+.step-desc { color: var(--text2); font-size: 14px; line-height: 1.75; }
+
+.step-accent { color: var(--cyan); font-weight: 500; }
+
+/* ───── FREE KEY BANNER ───── */
+.free-key-banner {
+  max-width: 1000px;
+  margin: 0 auto 100px;
+  padding: 0 24px;
+}
+
+.banner-inner {
+  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(34,211,238,0.05));
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 20px;
+  padding: 48px 56px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-inner::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%);
+}
+
+.banner-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(251,191,36,0.12);
+  border: 1px solid rgba(251,191,36,0.25);
+  border-radius: 100px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.banner-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.banner-desc { color: var(--text2); font-size: 15px; line-height: 1.75; }
+.banner-desc strong { color: var(--text); }
+
+.key-display {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+  min-width: 280px;
+  position: relative;
+}
+
+.key-label { color: var(--text3); font-size: 11px; margin-bottom: 8px; }
+.key-value { color: var(--green); letter-spacing: 1px; }
+.key-badge {
+  position: absolute;
+  top: -10px; right: 16px;
+  padding: 3px 10px;
+  background: rgba(52,211,153,0.15);
+  border: 1px solid rgba(52,211,153,0.3);
+  border-radius: 100px;
+  font-size: 10px;
+  color: var(--green);
+}
+
+/* ───── FEATURES ───── */
+.features-section {
+  padding: 0 24px 100px;
+}
+
+.features-grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.feature-card:hover {
+  border-color: var(--border-hover);
+  background: rgba(255,255,255,0.04);
+  transform: translateY(-4px);
+}
+
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon-wrap {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.fi-blue { background: rgba(59,130,246,0.12); }
+.fi-cyan { background: rgba(34,211,238,0.1); }
+.fi-green { background: rgba(52,211,153,0.1); }
+.fi-gold { background: rgba(251,191,36,0.1); }
+.fi-purple { background: rgba(167,139,250,0.1); }
+.fi-red { background: rgba(248,113,113,0.1); }
+
+.feature-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+.feature-desc { color: var(--text2); font-size: 14px; line-height: 1.75; }
+
+/* ───── SCENARIOS ───── */
+.scenarios-section {
+  padding: 0 24px 100px;
+}
+
+.scenarios-grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.scenario-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  display: flex;
+  gap: 20px;
+  transition: all .3s;
+  cursor: default;
+}
+
+.scenario-card:hover {
+  border-color: rgba(255,255,255,0.1);
+  background: var(--bg3);
+  transform: translateY(-2px);
+}
+
+.scenario-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.scenario-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.scenario-desc { color: var(--text2); font-size: 13px; line-height: 1.7; }
+
+.scenario-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  margin-top: 12px;
+}
+
+.tag-blue { background: rgba(59,130,246,0.12); color: var(--accent2); }
+.tag-green { background: rgba(52,211,153,0.1); color: var(--green); }
+.tag-gold { background: rgba(251,191,36,0.1); color: var(--gold); }
+.tag-purple { background: rgba(167,139,250,0.1); color: var(--purple); }
+.tag-cyan { background: rgba(34,211,238,0.1); color: var(--cyan); }
+.tag-red { background: rgba(248,113,113,0.1); color: var(--red); }
+
+/* ───── DOWNLOAD ───── */
+.download-section {
+  padding: 0 24px 100px;
+}
+
+.download-box {
+  max-width: 800px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--bg2), var(--bg3));
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 64px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.download-box::before {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(ellipse, rgba(59,130,246,0.1), transparent 70%);
+}
+
+.download-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+
+.download-sub { color: var(--text2); font-size: 16px; margin-bottom: 48px; }
+
+.download-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.dl-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 18px 28px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .25s;
+  min-width: 200px;
+}
+
+.dl-btn:hover {
+  border-color: rgba(99,179,237,0.3);
+  background: rgba(59,130,246,0.06);
+  transform: translateY(-3px);
+}
+
+.dl-btn-os {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dl-btn-desc { font-size: 12px; color: var(--text3); font-family: var(--font-mono); }
+
+.dl-free-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 32px;
+  padding: 8px 20px;
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.2);
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--green);
+}
+
+/* ───── FAQ ───── */
+.faq-section { padding: 0 24px 100px; }
+
+.faq-list {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.faq-item {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.faq-q {
+  padding: 20px 24px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  user-select: none;
+}
+
+.faq-q:hover { background: rgba(255,255,255,0.02); }
+
+.faq-arrow {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: transform .25s;
+}
+
+.faq-a {
+  padding: 0 24px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s ease, padding .25s;
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
+.faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+/* ───── FOOTER ───── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-left { color: var(--text3); font-size: 13px; }
+.footer-left a { color: var(--text3); text-decoration: none; }
+.footer-left a:hover { color: var(--text2); }
+
+.footer-right { display: flex; gap: 24px; }
+.footer-right a { color: var(--text3); font-size: 13px; text-decoration: none; }
+.footer-right a:hover { color: var(--text2); }
+
+/* ───── ANIMATIONS ───── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ───── COMPARISON STRIP ───── */
+.compare-strip {
+  max-width: 1000px;
+  margin: 0 auto 100px;
+  padding: 0 24px;
+}
+
+.compare-inner {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.compare-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.compare-row:last-child { border-bottom: none; }
+
+.compare-cell {
+  padding: 18px 24px;
+  font-size: 14px;
+  border-right: 1px solid var(--border);
+}
+.compare-cell:last-child { border-right: none; }
+
+.compare-row.header .compare-cell {
+  background: rgba(255,255,255,0.02);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.compare-row.header .compare-cell:nth-child(3) {
+  background: rgba(59,130,246,0.06);
+  color: var(--accent2);
+}
+
+.check { color: var(--green); }
+.cross { color: var(--text3); }
+.highlight-cell { background: rgba(59,130,246,0.04); }
+
+/* ───── RESPONSIVE ───── */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  nav ul { display: none; }
+  .steps-grid, .features-grid, .scenarios-grid { grid-template-columns: 1fr; }
+  .banner-inner { grid-template-columns: 1fr; }
+  .compare-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">🦞</div>
+    PackClaw
+  </a>
+  <ul>
+    <li><a href="#features">功能</a></li>
+    <li><a href="#scenarios">使用场景</a></li>
+    <li><a href="#download">下载</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#download" class="nav-cta">免费下载</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✦ 内置免费额度 · 安装即用</div>
+
+  <h1>
+    <span class="pack">Pack</span><span class="claw">Claw</span>
+  </h1>
+
+  <p class="hero-tagline">OpenClaw 一键安装包 · 真正开箱即用</p>
+
+  <p class="hero-sub">
+    无需命令行，无需配置 API Key，双击安装包即刻上手。<br>
+    <strong>内置免费额度</strong>，10 个精选场景开箱即用，<br>
+    让 AI 真正替你干活。
+  </p>
+
+  <div class="hero-actions">
+    <a href="#download" class="btn-primary">
+      <span>⬇</span> 立即免费下载
+    </a>
+    <a href="#scenarios" class="btn-secondary">
+      <span>▶</span> 看看能做什么
+    </a>
+  </div>
+
+  <div class="os-badges">
+    <div class="os-badge mac">
+      <div class="dot"></div>
+       macOS 支持
+    </div>
+    <div class="os-badge win">
+      <div class="dot"></div>
+      🪟 Windows 支持
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot r"></div>
+        <div class="terminal-dot y"></div>
+        <div class="terminal-dot g"></div>
+        <div class="terminal-title">PackClaw — OpenClaw Agent</div>
+      </div>
+      <div class="terminal-body">
+        <pre><span class="t-dim"># PackClaw 已启动，免费额度已就绪</span>
+
+<span class="t-cyan">用户 ›</span> <span class="t-white">帮我每天早上8点，自动抓取今日 A股涨停板列表，整理成表格推送到我的企业微信</span>
+
+<span class="t-green">PackClaw ›</span> <span class="t-white">好的，我来配置这个定时任务。</span>
+
+  <span class="t-dim">步骤 1/4</span> <span class="t-blue">连接企业微信 Webhook...</span>     <span class="t-green">✓</span>
+  <span class="t-dim">步骤 2/4</span> <span class="t-blue">配置 AKShare 数据源...</span>         <span class="t-green">✓</span>
+  <span class="t-dim">步骤 3/4</span> <span class="t-blue">创建定时任务 (08:00 每天)...</span>   <span class="t-green">✓</span>
+  <span class="t-dim">步骤 4/4</span> <span class="t-blue">生成 Excel 模板并测试推送...</span>  <span class="t-green">✓</span>
+
+<span class="t-gold">  ┌─────────────────────────────────────────┐</span>
+<span class="t-gold">  │</span>  <span class="t-white">涨停板日报</span> <span class="t-dim">2025-03-19  共 47 只</span>         <span class="t-gold">│</span>
+<span class="t-gold">  │</span>  <span class="t-green">↑ 首板 31只</span>  <span class="t-purple">↑↑ 二板 12只</span>  <span class="t-red">↑↑↑ 三板+ 4只</span>  <span class="t-gold">│</span>
+<span class="t-gold">  └─────────────────────────────────────────┘</span>
+
+<span class="t-green">✓ 完成</span> <span class="t-white">企业微信已收到推送，明日起每天自动执行。</span>
+<span class="t-dim">消耗额度: 0.024 元  剩余免费额度: 9.97 元</span>  <span class="cursor"></span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 3 STEPS -->
+<section id="setup">
+  <div class="section-header reveal">
+    <span class="section-label">// 上手流程</span>
+    <h2 class="section-title">3 步上手，1 分钟搞定</h2>
+    <p class="section-desc">无需任何开发知识，像安装普通软件一样安装 AI Agent</p>
+  </div>
+
+  <div class="steps-section">
+    <div class="steps-grid reveal">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">⬇</div>
+        <div class="step-title">下载安装包</div>
+        <p class="step-desc">选择你的操作系统，下载对应的安装包。macOS 双击 .dmg，Windows 双击 .exe，<span class="step-accent">10 分钟内完成安装</span>。</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">🎁</div>
+        <div class="step-title">一键激活免费额度</div>
+        <p class="step-desc">打开 PackClaw，<span class="step-accent">无需配置任何 API Key</span>。内置免费额度立即可用，直接跳过繁琐的注册与充值。</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🚀</div>
+        <div class="step-title">选择场景，开始对话</div>
+        <p class="step-desc">从 10 个<span class="step-accent">预置场景</span>中选择你需要的，或者直接用中文告诉 AI 你想做什么，它会自动完成。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FREE KEY BANNER -->
+<div class="free-key-banner reveal">
+  <div class="banner-inner">
+    <div>
+      <div class="banner-label">⚡ 核心差异</div>
+      <h3 class="banner-title">内置免费额度，无需配置 Key</h3>
+      <p class="banner-desc">
+        普通安装 OpenClaw 需要自己注册 Anthropic / Kimi 账号、获取 API Key、充值……<br>
+        <strong>PackClaw 帮你省掉这一切。</strong>下载即送免费额度，打开就能用。
+        额度用完后支持一键充值，也可随时切换自己的 Key。
+      </p>
+    </div>
+    <div class="key-display">
+      <div class="key-label">BUILT-IN API KEY</div>
+      <div class="key-value">pc-free-••••••••••••••••</div>
+      <div class="key-badge">已激活</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-header reveal">
+    <span class="section-label">// 核心功能</span>
+    <h2 class="section-title">为什么选择 PackClaw</h2>
+    <p class="section-desc">OpenClaw 的全部能力 + 零门槛的中文桌面体验</p>
+  </div>
+
+  <div class="features-section">
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-icon-wrap fi-blue">📦</div>
+        <div class="feature-title">一键安装，零依赖</div>
+        <p class="feature-desc">告别 Node.js / Git / 命令行。内嵌完整运行时，DMG 或 EXE 双击即用，装完就能跑。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap fi-gold">🎁</div>
+        <div class="feature-title">内置免费额度</div>
+        <p class="feature-desc">安装即送免费 Token 额度，无需注册 API、无需充值，下载即刻体验 AI 自动化的魔力。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap fi-cyan">🌏</div>
+        <div class="feature-title">中国网络深度优化</div>
+        <p class="feature-desc">预置国内镜像源，无需科学上网，安装与运行全程流畅。飞书、钉钉、企微原生支持。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap fi-green">🧩</div>
+        <div class="feature-title">10 大场景开箱即用</div>
+        <p class="feature-desc">职场自动化、A股追踪、小红书内容、智能客服……10 个精选场景一键启动，无需配置。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap fi-purple">🌐</div>
+        <div class="feature-title">浏览器全自动操控</div>
+        <p class="feature-desc">AI 自动打开浏览器、抓取数据、填写表单、截图存档，复杂网页操作一句话搞定。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap fi-red">🖥️</div>
+        <div class="feature-title">macOS + Windows 双平台</div>
+        <p class="feature-desc">Apple Silicon M 系列、Intel Mac、Windows x64 / ARM64 全架构覆盖，一个团队，两套系统。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<div class="compare-strip reveal">
+  <div class="section-header" style="padding-top: 0; padding-bottom: 40px;">
+    <span class="section-label">// 对比</span>
+    <h2 class="section-title" style="font-size: 32px;">PackClaw vs 手动安装 OpenClaw</h2>
+  </div>
+  <div class="compare-inner">
+    <div class="compare-row header">
+      <div class="compare-cell">对比项</div>
+      <div class="compare-cell">手动安装 OpenClaw</div>
+      <div class="compare-cell">🦞 PackClaw（推荐）</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell" style="color:var(--text2)">安装难度</div>
+      <div class="compare-cell"><span class="cross">需 Node.js + Git + 命令行</span></div>
+      <div class="compare-cell highlight-cell"><span class="check">✓</span> 双击安装包，1 分钟搞定</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell" style="color:var(--text2)">API Key</div>
+      <div class="compare-cell"><span class="cross">需自行注册、充值</span></div>
+      <div class="compare-cell highlight-cell"><span class="check">✓</span> 内置免费额度，无需配置</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell" style="color:var(--text2)">预置场景</div>
+      <div class="compare-cell"><span class="cross">无，需自行搭建</span></div>
+      <div class="compare-cell highlight-cell"><span class="check">✓</span> 10 个场景开箱即用</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell" style="color:var(--text2)">中国网络</div>
+      <div class="compare-cell"><span class="cross">可能需要科学上网</span></div>
+      <div class="compare-cell highlight-cell"><span class="check">✓</span> 国内镜像，无需翻墙</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell" style="color:var(--text2)">上手时间</div>
+      <div class="compare-cell"><span class="cross">30 分钟 ~ 数小时</span></div>
+      <div class="compare-cell highlight-cell"><span class="check">✓</span> &lt; 5 分钟</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- SCENARIOS -->
+<section id="scenarios">
+  <div class="section-header reveal">
+    <span class="section-label">// 内置场景</span>
+    <h2 class="section-title">10 大场景，开箱即用</h2>
+    <p class="section-desc">从职场自动化到个人生活，精选国内最高频的 AI Agent 使用场景</p>
+  </div>
+
+  <div class="scenarios-section">
+    <div class="scenarios-grid reveal">
+      <div class="scenario-card">
+        <div class="scenario-icon">🏢</div>
+        <div>
+          <div class="scenario-title">职场 IM 智能助手</div>
+          <p class="scenario-desc">一键接入飞书、钉钉、企业微信，打造团队 AI 管家。自动处理消息、总结会议纪要、生成日报周报。</p>
+          <span class="scenario-tag tag-blue">飞书 · 钉钉 · 企微</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">📈</div>
+        <div>
+          <div class="scenario-title">A 股财报自动追踪</div>
+          <p class="scenario-desc">利用 AKShare 数据源，定时抓取涨停板、财报关键数据，自动生成分析报告推送到你的手机。</p>
+          <span class="scenario-tag tag-gold">AKShare · 定时推送</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">🌸</div>
+        <div>
+          <div class="scenario-title">小红书内容工厂</div>
+          <p class="scenario-desc">自动采集热点话题，批量生成适合小红书调性的爆款文案，配合图片模板一键发布。</p>
+          <span class="scenario-tag tag-red">内容创作 · 批量发布</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">💬</div>
+        <div>
+          <div class="scenario-title">全渠道 7×24 智能客服</div>
+          <p class="scenario-desc">同时接入微信客服、企业微信、QQ 机器人，基于你的产品知识库自动回复用户问题。</p>
+          <span class="scenario-tag tag-green">微信 · QQ · 全天候</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">☀️</div>
+        <div>
+          <div class="scenario-title">个性化早间简报</div>
+          <p class="scenario-desc">每天早上 8 点，AI 自动抓取今日天气、日历事项、热点新闻，生成专属简报推送到你的手机。</p>
+          <span class="scenario-tag tag-cyan">定时 · 个性化推送</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">🛒</div>
+        <div>
+          <div class="scenario-title">电商卖家 AI 助手</div>
+          <p class="scenario-desc">用自然语言查询京东/淘宝订单、库存数据，自动生成销售分析报告，一人顶一个运营团队。</p>
+          <span class="scenario-tag tag-gold">电商 · 数据分析</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">📄</div>
+        <div>
+          <div class="scenario-title">飞书文档智能整理</div>
+          <p class="scenario-desc">会议结束后自动生成结构化纪要，关键决策自动归档到飞书表格，知识管理从此不再靠记忆。</p>
+          <span class="scenario-tag tag-blue">文档 · 知识管理</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">🖥️</div>
+        <div>
+          <div class="scenario-title">服务器自愈运维</div>
+          <p class="scenario-desc">宕机自动检测、自动重启、自动发送告警到企业微信。无需 7×24 盯着监控，AI 是你的运维搭档。</p>
+          <span class="scenario-tag tag-purple">运维 · 自动化</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">🩺</div>
+        <div>
+          <div class="scenario-title">个人健康追踪助手</div>
+          <p class="scenario-desc">记录饮食、症状、运动数据，AI 自动分析规律、生成健康周报，发现你自己都没注意到的趋势。</p>
+          <span class="scenario-tag tag-green">健康 · 数据追踪</span>
+        </div>
+      </div>
+      <div class="scenario-card">
+        <div class="scenario-icon">🍵</div>
+        <div>
+          <div class="scenario-title">小生意全流程自动化</div>
+          <p class="scenario-desc">一人公司的最佳搭档。库存管理、订单处理、客户服务全流程自动化，让你专注产品，其余交给 AI。</p>
+          <span class="scenario-tag tag-cyan">一人公司 · 全自动</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- DOWNLOAD -->
+<section id="download">
+  <div class="section-header reveal">
+    <span class="section-label">// 立即开始</span>
+    <h2 class="section-title">免费下载 PackClaw</h2>
+    <p class="section-desc">选择你的操作系统，下载安装包，5 分钟后 AI 开始替你工作</p>
+  </div>
+
+  <div class="download-section">
+    <div class="download-box reveal">
+      <h3 class="download-title">立即开始，永久免费</h3>
+      <p class="download-sub">内置免费额度，无需信用卡，无需 API Key</p>
+
+      <div class="download-buttons">
+        <a href="#" class="dl-btn">
+          <div class="dl-btn-os"> macOS</div>
+          <div class="dl-btn-desc">Apple Silicon M1/M2/M3/M4 · DMG</div>
+        </a>
+        <a href="#" class="dl-btn">
+          <div class="dl-btn-os"> macOS Intel</div>
+          <div class="dl-btn-desc">Intel Mac 2020 及更早 · DMG</div>
+        </a>
+        <a href="#" class="dl-btn">
+          <div class="dl-btn-os">🪟 Windows x64</div>
+          <div class="dl-btn-desc">Intel / AMD 64位 · EXE</div>
+        </a>
+        <a href="#" class="dl-btn">
+          <div class="dl-btn-os">🪟 Windows ARM</div>
+          <div class="dl-btn-desc">Snapdragon X 系列 · EXE</div>
+        </a>
+      </div>
+
+      <div>
+        <span class="dl-free-badge">✓ 内置免费额度已就绪，安装即用</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header reveal">
+    <span class="section-label">// 常见问题</span>
+    <h2 class="section-title">还有疑问？</h2>
+  </div>
+
+  <div class="faq-section">
+    <div class="faq-list reveal">
+      <div class="faq-item open">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          内置的免费额度能用多久？
+          <div class="faq-arrow">▾</div>
+        </div>
+        <div class="faq-a">
+          免费额度约可完成 100~200 次对话，足够体验所有内置场景。额度用完后，可在 PackClaw 设置页一键充值，或者切换成自己的 Anthropic / Kimi 等 API Key 继续使用，非常灵活。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          PackClaw 和 OneClaw 有什么区别？
+          <div class="faq-arrow">▾</div>
+        </div>
+        <div class="faq-a">
+          OneClaw 是 OpenClaw 的一键安装包，需要用户自行配置 API Key。PackClaw 在此基础上更进一步：内置免费额度（无需 Key）+ 10 个预置场景（开箱即用）+ 更深度的中国本土场景适配。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          需要科学上网吗？
+          <div class="faq-arrow">▾</div>
+        </div>
+        <div class="faq-a">
+          不需要。PackClaw 内置国内镜像源，模型请求走国内中转节点，所有功能在大陆网络环境下均可正常使用，无需任何代理工具。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          我的数据安全吗？
+          <div class="faq-arrow">▾</div>
+        </div>
+        <div class="faq-a">
+          PackClaw 的核心逻辑运行在你的本地电脑上。对话内容通过 HTTPS 加密传输到 AI 模型，不会被 PackClaw 储存或分析。文件读写操作仅在你本地磁盘进行。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          安装后 AI 没有响应怎么办？
+          <div class="faq-arrow">▾</div>
+        </div>
+        <div class="faq-a">
+          请检查网络连接是否正常。若内置免费额度已用完，页面会有明显提示，按提示充值或切换 Key 即可恢复。如果仍有问题，可以通过应用内的「反馈」按钮联系我们。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    © 2026 PackClaw. Built on <a href="https://github.com/anthropics/claude-code">OpenClaw</a>. &nbsp;·&nbsp;
+    <a href="#">京ICP备XXXXXXXX号</a>
+  </div>
+  <div class="footer-right">
+    <a href="#">GitHub</a>
+    <a href="#">文档</a>
+    <a href="#">隐私政策</a>
+  </div>
+</footer>
+
+<script>
+// FAQ toggle
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(r => observer.observe(r));
+
+// Stagger children in grids
+document.querySelectorAll('.features-grid, .scenarios-grid, .steps-grid').forEach(grid => {
+  [...grid.children].forEach((child, i) => {
+    child.style.transitionDelay = (i * 0.08) + 's';
+  });
+});
+</script>
+</body>
+</html>
