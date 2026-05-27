@@ -1,0 +1,12 @@
+version: 1.0.0
+releaseDate: '2026-05-27'
+files:
+  - url: PackClaw-1.0.0-arm64-mac.zip
+    sha512: PLACEHOLDER
+    size: 0
+  - url: PackClaw-1.0.0-x64-mac.zip
+    sha512: PLACEHOLDER
+    size: 0
+path: PackClaw-1.0.0-arm64-mac.zip
+sha512: PLACEHOLDER
+releaseDate: '2026-05-27'

@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PackClaw — 版本更新</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050810;
+  --bg2: #0b0f1e;
+  --bg3: #111828;
+  --card: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(99,179,237,0.35);
+  --text: #f0f4ff;
+  --text2: #8899bb;
+  --text3: #4a5a78;
+  --accent: #3b82f6;
+  --accent2: #60a5fa;
+  --accent-glow: rgba(59,130,246,0.15);
+  --cyan: #22d3ee;
+  --cyan-glow: rgba(34,211,238,0.12);
+  --gold: #fbbf24;
+  --green: #34d399;
+  --purple: #a78bfa;
+  --red: #f87171;
+  --font-display: 'Sora', sans-serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  animation: blobFloat 12s ease-in-out infinite alternate;
+}
+.blob-1 { width: 600px; height: 600px; background: rgba(59,130,246,0.07); top: -200px; left: -150px; }
+.blob-2 { width: 500px; height: 500px; background: rgba(34,211,238,0.05); top: 30%; right: -200px; animation-delay: -4s; }
+
+@keyframes blobFloat {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(30px, 40px) scale(1.08); }
+}
+
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(5,8,16,0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 0 20px rgba(59,130,246,0.4);
+}
+
+nav ul { list-style: none; display: flex; gap: 32px; }
+nav ul a { color: var(--text2); text-decoration: none; font-size: 14px; transition: color .2s; }
+nav ul a:hover { color: var(--text); }
+
+.nav-cta {
+  background: linear-gradient(135deg, var(--accent), #2563eb);
+  color: #fff !important;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: 0 0 16px rgba(59,130,246,0.3);
+}
+.nav-cta:hover { opacity: 0.9 !important; box-shadow: 0 0 24px rgba(59,130,246,0.5) !important; }
+
+.main-container {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 120px 24px 80px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.page-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 16px;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.12;
+  margin-bottom: 12px;
+}
+
+.page-desc {
+  color: var(--text2);
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.update-check-card {
+  background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(34,211,238,0.04));
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.update-check-card::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 250px; height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.1), transparent 70%);
+}
+
+.check-icon {
+  width: 64px; height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), #2563eb);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 32px rgba(59,130,246,0.3);
+}
+
+.check-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.check-subtitle {
+  color: var(--text2);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.btn-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--accent), #1d4ed8);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(59,130,246,0.25), 0 4px 16px rgba(0,0,0,0.2);
+  transition: all .25s;
+}
+
+.btn-check:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 50px rgba(59,130,246,0.4), 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.btn-check:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-check .spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  display: none;
+}
+
+.btn-check.loading .spinner { display: block; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.check-result {
+  margin-top: 24px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  display: none;
+}
+
+.check-result.show { display: flex; align-items: center; gap: 12px; }
+
+.check-result.up-to-date {
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.2);
+  color: var(--green);
+}
+
+.check-result.update-available {
+  background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.25);
+  color: var(--accent2);
+}
+
+.check-result.error {
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.2);
+  color: var(--red);
+}
+
+.update-detail {
+  text-align: left;
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: none;
+}
+
+.update-detail.show { display: block; }
+
+.update-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+.update-detail-row:last-child { border-bottom: none; }
+.update-detail-row .label { color: var(--text3); }
+.update-detail-row .value { color: var(--text); font-family: var(--font-mono); font-size: 12px; }
+
+.download-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.dl-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .2s;
+}
+
+.dl-link:hover {
+  border-color: rgba(99,179,237,0.3);
+  background: rgba(59,130,246,0.06);
+}
+
+.dl-link .arch {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 48px 0;
+}
+
+.releases-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.releases-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.channel-tabs {
+  display: flex;
+  gap: 4px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 3px;
+  border: 1px solid var(--border);
+}
+
+.channel-tab {
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text3);
+  background: transparent;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: var(--font-body);
+}
+
+.channel-tab:hover { color: var(--text2); }
+
+.channel-tab.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.3);
+}
+
+.release-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.release-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 28px;
+  transition: all .25s;
+}
+
+.release-item:hover {
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+}
+
+.release-item.latest {
+  border-color: rgba(59,130,246,0.25);
+  background: rgba(59,130,246,0.04);
+}
+
+.release-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.release-version {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.release-badge {
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+}
+
+.badge-latest {
+  background: rgba(59,130,246,0.15);
+  border: 1px solid rgba(59,130,246,0.3);
+  color: var(--accent2);
+}
+
+.badge-stable {
+  background: rgba(52,211,153,0.1);
+  border: 1px solid rgba(52,211,153,0.25);
+  color: var(--green);
+}
+
+.badge-dev {
+  background: rgba(251,191,36,0.1);
+  border: 1px solid rgba(251,191,36,0.25);
+  color: var(--gold);
+}
+
+.release-date {
+  color: var(--text3);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  margin-left: auto;
+}
+
+.release-changelog {
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.release-changelog ul {
+  list-style: none;
+  padding: 0;
+}
+
+.release-changelog li {
+  padding: 3px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.release-changelog li::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 9px;
+}
+
+.release-downloads {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.release-dl-btn {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.release-dl-btn:hover {
+  border-color: rgba(99,179,237,0.3);
+  color: var(--text);
+  background: rgba(59,130,246,0.06);
+}
+
+.release-dl-btn .platform-icon {
+  font-size: 14px;
+}
+
+.update-info-footer {
+  margin-top: 48px;
+  padding: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.update-info-footer h4 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text2);
+}
+
+.update-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.update-info-item {
+  padding: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.update-info-item .info-label {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  margin-bottom: 6px;
+}
+
+.update-info-item .info-value {
+  font-size: 13px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  word-break: break-all;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-left { color: var(--text3); font-size: 13px; }
+.footer-left a { color: var(--text3); text-decoration: none; }
+.footer-left a:hover { color: var(--text2); }
+
+.footer-right { display: flex; gap: 24px; }
+.footer-right a { color: var(--text3); font-size: 13px; text-decoration: none; }
+.footer-right a:hover { color: var(--text2); }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text3);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  nav ul { display: none; }
+  .main-container { padding: 100px 16px 60px; }
+  .update-check-card { padding: 28px 20px; }
+  .releases-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .download-links { flex-direction: column; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<nav>
+  <a href="../" class="logo">
+    <div class="logo-icon">🦞</div>
+    PackClaw
+  </a>
+  <ul>
+    <li><a href="../#features">功能</a></li>
+    <li><a href="./">更新日志</a></li>
+    <li><a href="../#download">下载</a></li>
+    <li><a href="../#faq">FAQ</a></li>
+    <li><a href="../#download" class="nav-cta">免费下载</a></li>
+  </ul>
+</nav>
+
+<div class="main-container">
+
+  <div class="page-header">
+    <span class="page-label">// VERSION HISTORY</span>
+    <h1 class="page-title">版本更新</h1>
+    <p class="page-desc">PackClaw 客户端更新日志与版本下载。客户端会自动检查更新，你也可以手动下载安装。</p>
+  </div>
+
+  <div class="update-check-card">
+    <div class="check-icon">🔄</div>
+    <div class="check-title">检查软件更新</div>
+    <div class="check-subtitle" id="currentVersion">当前正在读取版本信息...</div>
+    <button class="btn-check" id="btnCheckUpdate" onclick="checkForUpdates()">
+      <span class="spinner"></span>
+      <span class="btn-text">检查更新</span>
+    </button>
+    <div class="check-result" id="checkResult"></div>
+    <div class="update-detail" id="updateDetail">
+      <div class="update-detail-row">
+        <span class="label">最新版本</span>
+        <span class="value" id="detailVersion">-</span>
+      </div>
+      <div class="update-detail-row">
+        <span class="label">发布日期</span>
+        <span class="value" id="detailDate">-</span>
+      </div>
+      <div class="update-detail-row">
+        <span class="label">文件大小</span>
+        <span class="value" id="detailSize">-</span>
+      </div>
+      <div class="download-links" id="downloadLinks"></div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div class="releases-header">
+    <h2 class="releases-title">发布历史</h2>
+    <div class="channel-tabs">
+      <button class="channel-tab active" data-channel="stable" onclick="switchChannel('stable', this)">Stable</button>
+      <button class="channel-tab" data-channel="dev" onclick="switchChannel('dev', this)">Dev</button>
+    </div>
+  </div>
+
+  <div id="releaseList" class="release-list">
+    <div class="empty-state">正在加载发布信息...</div>
+  </div>
+
+  <div class="update-info-footer">
+    <h4>客户端自动更新机制</h4>
+    <div class="update-info-grid">
+      <div class="update-info-item">
+        <div class="info-label">UPDATE URL (MACOS)</div>
+        <div class="info-value">https://packclaw.cn/releases/latest-mac.yml</div>
+      </div>
+      <div class="update-info-item">
+        <div class="info-label">UPDATE URL (WINDOWS)</div>
+        <div class="info-value">https://packclaw.cn/releases/latest.yml</div>
+      </div>
+      <div class="update-info-item">
+        <div class="info-label">DEV CHANNEL (MACOS)</div>
+        <div class="info-value">https://packclaw.cn/releases/dev-mac.yml</div>
+      </div>
+      <div class="update-info-item">
+        <div class="info-label">DEV CHANNEL (WINDOWS)</div>
+        <div class="info-value">https://packclaw.cn/releases/dev.yml</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-left">
+    © 2026 PackClaw. Built on OpenClaw. &nbsp;·&nbsp;
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">京ICP备XXXXXXXX号</a>
+  </div>
+  <div class="footer-right">
+    <a href="https://github.com/linyujade/packclaw" target="_blank">GitHub</a>
+    <a href="../docs/index.html" target="_blank">文档</a>
+  </div>
+</footer>
+
+<script>
+const BASE_URL = 'https://packclaw.cn/releases';
+const DOWNLOAD_BASE = 'https://packclaw.cn/releases';
+let currentChannel = 'stable';
+
+function getPlatform() {
+  var ua = navigator.userAgent || navigator.platform || '';
+  var isMac = /Mac|iPhone|iPod|iPad/i.test(ua);
+  if (isMac) return 'mac';
+  return 'win';
+}
+
+function getYmlFileName(platform, channel) {
+  if (channel === 'dev') {
+    return platform === 'mac' ? 'dev-mac.yml' : 'dev.yml';
+  }
+  return platform === 'mac' ? 'latest-mac.yml' : 'latest.yml';
+}
+
+function parseYml(text) {
+  var result = { version: '', releaseDate: '', files: [] };
+  var lines = text.split('\n');
+  var inFiles = false;
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line.startsWith('version:')) {
+      result.version = line.replace('version:', '').trim().replace(/['"]/g, '');
+    } else if (line.startsWith('releaseDate:')) {
+      result.releaseDate = line.replace('releaseDate:', '').trim().replace(/['"]/g, '');
+    } else if (line.startsWith('files:')) {
+      inFiles = true;
+      continue;
+    } else if (inFiles && line.startsWith('  - url:')) {
+      result.files.push({ url: line.replace('  - url:', '').trim().replace(/['"]/g, '') });
+    } else if (inFiles && line.startsWith('    url:')) {
+      result.files.push({ url: line.replace('    url:', '').trim().replace(/['"]/g, '') });
+    } else if (inFiles && line && !line.startsWith(' ') && !line.startsWith('\t')) {
+      inFiles = false;
+    } else if (inFiles && line.startsWith('    sha512:')) {
+      if (result.files.length > 0) result.files[result.files.length - 1].sha512 = line.replace('    sha512:', '').trim();
+    } else if (inFiles && line.startsWith('    size:')) {
+      if (result.files.length > 0) result.files[result.files.length - 1].size = parseInt(line.replace('    size:', '').trim());
+    }
+  }
+  return result;
+}
+
+function formatBytes(bytes) {
+  if (!bytes || bytes === 0) return '-';
+  var sizes = ['B', 'KB', 'MB', 'GB'];
+  var i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '-';
+  try {
+    var d = new Date(dateStr);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  } catch (e) {
+    return dateStr;
+  }
+}
+
+function getArchLabel(filename) {
+  if (filename.includes('arm64')) return 'ARM64';
+  if (filename.includes('x64') || filename.includes('amd64')) return 'x64';
+  return '';
+}
+
+function getPlatformLabel(filename) {
+  if (filename.includes('.dmg') || filename.includes('-mac.')) return 'macOS';
+  if (filename.includes('.exe') || filename.includes('Setup')) return 'Windows';
+  return '';
+}
+
+function getPlatformIcon(filename) {
+  if (filename.includes('.dmg') || filename.includes('-mac.')) return '🍎';
+  if (filename.includes('.exe') || filename.includes('Setup')) return '🪟';
+  return '📦';
+}
+
+function isPackclawClient() {
+  try {
+    return window.packclaw && typeof window.packclaw.checkForUpdates === 'function';
+  } catch (e) {
+    return false;
+  }
+}
+
+async function fetchYml(platform, channel) {
+  var filename = getYmlFileName(platform, channel);
+  var url = BASE_URL + '/' + filename;
+  try {
+    var resp = await fetch(url, { cache: 'no-store' });
+    if (!resp.ok) return null;
+    var text = await resp.text();
+    return parseYml(text);
+  } catch (e) {
+    return null;
+  }
+}
+
+function showResult(type, message) {
+  var el = document.getElementById('checkResult');
+  el.className = 'check-result show ' + type;
+  el.innerHTML = message;
+}
+
+async function checkForUpdates() {
+  var btn = document.getElementById('btnCheckUpdate');
+  var detailEl = document.getElementById('updateDetail');
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+  btn.querySelector('.btn-text').textContent = '正在检查...';
+  detailEl.classList.remove('show');
+
+  var platform = getPlatform();
+  var ymlData = await fetchYml(platform, currentChannel);
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+  btn.querySelector('.btn-text').textContent = '重新检查';
+
+  if (!ymlData || !ymlData.version) {
+    showResult('error', '⚠️ 无法获取更新信息，请检查网络连接后重试。');
+    return;
+  }
+
+  document.getElementById('currentVersion').textContent = '最新版本: v' + ymlData.version;
+
+  var downloadsHtml = '';
+  if (ymlData.files && ymlData.files.length > 0) {
+    ymlData.files.forEach(function(f) {
+      var fname = f.url.split('/').pop();
+      var arch = getArchLabel(fname);
+      var pLabel = getPlatformLabel(fname);
+      var pIcon = getPlatformIcon(fname);
+      var href = f.url.startsWith('http') ? f.url : (DOWNLOAD_BASE + '/' + f.url);
+      downloadsHtml += '<a href="' + href + '" class="dl-link" target="_blank">' + pIcon + ' ' + pLabel + ' ' + (arch ? '(' + arch + ')' : '') + '</a>';
+    });
+  }
+
+  document.getElementById('detailVersion').textContent = 'v' + ymlData.version;
+  document.getElementById('detailDate').textContent = formatDate(ymlData.releaseDate);
+
+  var totalSize = 0;
+  if (ymlData.files) {
+    ymlData.files.forEach(function(f) { if (f.size) totalSize += f.size; });
+  }
+  document.getElementById('detailSize').textContent = totalSize > 0 ? formatBytes(totalSize) : '-';
+  document.getElementById('downloadLinks').innerHTML = downloadsHtml;
+
+  if (isPackclawClient()) {
+    showResult('update-available', '🔄 检测到新版本 v' + ymlData.version + '，请在客户端中点击"安装更新"');
+  } else {
+    showResult('update-available', '✨ 最新版本: <strong>v' + ymlData.version + '</strong>（' + formatDate(ymlData.releaseDate) + '）');
+  }
+
+  detailEl.classList.add('show');
+  renderReleaseList(ymlData);
+}
+
+function renderReleaseList(ymlData) {
+  var list = document.getElementById('releaseList');
+  if (!ymlData || !ymlData.version) {
+    list.innerHTML = '<div class="empty-state">暂无发布信息</div>';
+    return;
+  }
+
+  var channelLabel = currentChannel === 'dev' ? 'Dev' : 'Stable';
+  var badgeClass = currentChannel === 'dev' ? 'badge-dev' : 'badge-stable';
+
+  var filesHtml = '';
+  if (ymlData.files && ymlData.files.length > 0) {
+    ymlData.files.forEach(function(f) {
+      var fname = f.url.split('/').pop();
+      var arch = getArchLabel(fname);
+      var pLabel = getPlatformLabel(fname);
+      var pIcon = getPlatformIcon(fname);
+      var href = f.url.startsWith('http') ? f.url : (DOWNLOAD_BASE + '/' + f.url);
+      filesHtml += '<a href="' + href + '" class="release-dl-btn" target="_blank"><span class="platform-icon">' + pIcon + '</span>' + pLabel + ' ' + arch + '</a>';
+    });
+  }
+
+  list.innerHTML =
+    '<div class="release-item latest">' +
+      '<div class="release-top">' +
+        '<span class="release-version">v' + ymlData.version + '</span>' +
+        '<span class="release-badge badge-latest">Latest</span>' +
+        '<span class="release-badge ' + badgeClass + '">' + channelLabel + '</span>' +
+        '<span class="release-date">' + formatDate(ymlData.releaseDate) + '</span>' +
+      '</div>' +
+      '<div class="release-changelog">' +
+        '<ul>' +
+          '<li>版本 ' + ymlData.version + ' 更新</li>' +
+          '<li>详细更新日志请查看 <a href="https://github.com/linyujade/packclaw/releases" target="_blank" style="color:var(--accent2);text-decoration:none;">GitHub Releases</a></li>' +
+        '</ul>' +
+      '</div>' +
+      (filesHtml ? '<div class="release-downloads">' + filesHtml + '</div>' : '') +
+    '</div>';
+}
+
+function switchChannel(channel, el) {
+  currentChannel = channel;
+  document.querySelectorAll('.channel-tab').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+  checkForUpdates();
+}
+
+(function init() {
+  checkForUpdates();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+version: 1.0.0
+releaseDate: '2026-05-27'
+files:
+  - url: PackClaw-Setup-1.0.0-x64.exe
+    sha512: PLACEHOLDER
+    size: 0
+  - url: PackClaw-Setup-1.0.0-arm64.exe
+    sha512: PLACEHOLDER
+    size: 0
+path: PackClaw-Setup-1.0.0-x64.exe
+sha512: PLACEHOLDER
+releaseDate: '2026-05-27'

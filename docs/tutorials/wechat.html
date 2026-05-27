@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PackClaw 微信连接教程 - PackClaw 教程</title>
+  <meta name="description" content="从下载安装到微信对话，只需 5 步。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="icon" type="image/png" href="../../assets/critter-128.png">
+  <style>
+    .logo-icon { width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#22d3ee);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 0 20px rgba(59,130,246,0.4);overflow:hidden; }
+    .tutorial-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .tutorial-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .tutorial-breadcrumb a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .tutorial-breadcrumb a:hover {
+      color: var(--cyan-bright);
+    }
+
+    .tutorial-breadcrumb .sep {
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    .tutorial-page h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .tutorial-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .tutorial-content h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .tutorial-content h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 28px;
+      margin-bottom: 12px;
+    }
+
+    .tutorial-content p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .tutorial-content ul, .tutorial-content ol {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+
+    .tutorial-content li {
+      margin-bottom: 6px;
+    }
+
+    .tutorial-content code {
+      background: var(--bg-surface);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      color: var(--cyan-bright);
+    }
+
+    .tutorial-content pre {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 20px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    .tutorial-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .tutorial-content .tip {
+      background: rgba(20, 184, 166, 0.06);
+      border: 1px solid rgba(20, 184, 166, 0.15);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .tutorial-content .info {
+      background: rgba(59, 130, 246, 0.06);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .tutorial-content .tip-label, .tutorial-content .info-label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    .tutorial-content .tip-label { color: var(--cyan-bright); }
+    .tutorial-content .info-label { color: #60a5fa; }
+
+    .tutorial-content .tip p, .tutorial-content .info p {
+      margin-bottom: 0;
+    }
+
+    .tutorial-content strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .tutorial-content img {
+      max-width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 16px;
+    }
+
+    .tutorial-content table {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      border-collapse: collapse;
+    }
+
+    .tutorial-content table th {
+      text-align: left;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-subtle);
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+    }
+
+    .tutorial-content table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(136, 146, 176, 0.06);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .tutorial-content table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .step-overview {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .step-overview ol {
+      margin-bottom: 0;
+      padding-left: 20px;
+    }
+
+    .step-overview li {
+      margin-bottom: 4px;
+    }
+
+    .tutorial-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .tutorial-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+
+    .tutorial-nav a:hover {
+      border-color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .tutorial-nav a .label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .tutorial-page { padding: 32px 16px 60px; }
+      .tutorial-nav { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon">🦀</div>
+        <span>PackClaw</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../../index.html">首页</a></li>
+          <li><a href="../index.html">教程</a></li>
+          <li><a href="https://github.com/anomalyco/opencode" target="_blank">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="tutorial-page">
+    <div class="tutorial-breadcrumb">
+      <a href="../index.html">教程</a>
+      <span class="sep">/</span>
+      <span>微信连接</span>
+    </div>
+
+    <h1>PackClaw 微信连接教程</h1>
+
+    <div class="tutorial-meta">
+      <span>5 个步骤</span>
+      <span>·</span>
+      <span>难度：简单</span>
+    </div>
+
+    <div class="tutorial-content">
+      <p>从下载安装到微信对话，只需 5 步。</p>
+
+      <h2>教程概览</h2>
+      <p>完成以下步骤，你就能通过微信与 PackClaw 对话：</p>
+      <div class="step-overview">
+        <ol>
+          <li>下载 PackClaw 客户端</li>
+          <li>邮箱登录51Key</li>
+          <li>开启微信控制</li>
+          <li>微信扫码连接</li>
+          <li>开始对话</li>
+        </ol>
+      </div>
+
+      <h2>步骤 1: 下载 PackClaw 客户端</h2>
+      <p>访问 <a href="https://packclaw.cn" target="_blank" rel="noreferrer">packclaw.cn</a> 下载 PackClaw 客户端并安装。</p>
+      <img src="../assets/wechat-01-download.BW3rux_v.png" alt="下载 PackClaw 客户端">
+
+      <h2>步骤 2: 登录 Kimi 会员</h2>
+      <p>打开 PackClaw，点击 <strong>「Kimi 会员登录」</strong>。</p>
+      <img src="../assets/wechat-02-kimi-login.D1AYN-ZT.png" alt="登录 Kimi 会员">
+
+      <h2>步骤 3: 开启微信控制</h2>
+      <p>进入 <strong>「设置」</strong> → <strong>「微信控制」</strong>，打开开关。</p>
+      <img src="../assets/wechat-03-settings-entry.C-zp0Szj.png" alt="微信控制设置入口">
+      <img src="../assets/wechat-04-switch-on.CcDynKOy.png" alt="开启微信控制开关">
+
+      <h2>步骤 4: 微信扫码连接</h2>
+      <p>使用最新版微信扫描 PackClaw 显示的二维码。</p>
+      <img src="../assets/wechat-05-scan-qr.CJxaOuQu.png" alt="微信扫码连接">
+      <img src="../assets/wechat-06-phone-connect.DQDRnwxr.png" alt="手机确认连接" style="max-width:320px;border-radius:16px;">
+
+      <h2>微信连接完成！</h2>
+      <p>连接成功后，你可以直接在微信中与 AI 对话。</p>
+      <img src="../assets/wechat-07-chat-demo.B2N0faPK.png" alt="微信对话示例" style="max-width:320px;border-radius:16px;">
+      <div class="info">
+        <div class="info-label">如何卸载？</div>
+        <p>如果你需要卸载 PackClaw 或之前安装的其他 OpenClaw 客户端，请查看 <a href="uninstall.html">卸载指南</a>。</p>
+      </div>
+    </div>
+
+    <div class="tutorial-nav">
+      <a href="qq.html">
+        <span>←</span>
+        <div>
+          <div class="label">上一篇</div>
+          <span>QQ 配置</span>
+        </div>
+      </a>
+      <a href="uninstall.html">
+        <div style="text-align:right;">
+          <div class="label">下一篇</div>
+          <span>卸载指南 →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <span class="footer-copy">&copy; 2026 PackClaw</span>
+      <ul class="footer-links">
+        <li><a href="../../index.html">首页</a></li>
+        <li><a href="../index.html">文档</a></li>
+        <li><a href="https://github.com/anomalyco/opencode" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>
