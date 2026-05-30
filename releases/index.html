@@ -657,19 +657,19 @@ footer {
     <div class="update-info-grid">
       <div class="update-info-item">
         <div class="info-label">UPDATE URL (MACOS)</div>
-        <div class="info-value">https://packclaw.cn/releases/latest-mac.yml</div>
+        <div class="info-value">https://www.packclaw.cn/releases/latest-mac.yml</div>
       </div>
       <div class="update-info-item">
         <div class="info-label">UPDATE URL (WINDOWS)</div>
-        <div class="info-value">https://packclaw.cn/releases/latest.yml</div>
+        <div class="info-value">https://www.packclaw.cn/releases/latest.yml</div>
       </div>
       <div class="update-info-item">
         <div class="info-label">DEV CHANNEL (MACOS)</div>
-        <div class="info-value">https://packclaw.cn/releases/dev-mac.yml</div>
+        <div class="info-value">https://www.packclaw.cn/releases/dev-mac.yml</div>
       </div>
       <div class="update-info-item">
         <div class="info-label">DEV CHANNEL (WINDOWS)</div>
-        <div class="info-value">https://packclaw.cn/releases/dev.yml</div>
+        <div class="info-value">https://www.packclaw.cn/releases/dev.yml</div>
       </div>
     </div>
   </div>
@@ -688,8 +688,8 @@ footer {
 </footer>
 
 <script>
-const BASE_URL = 'https://packclaw.cn/releases';
-const DOWNLOAD_BASE = 'https://packclaw.cn/releases';
+const BASE_URL = 'https://www.packclaw.cn/releases';
+const DOWNLOAD_BASE = 'https://www.packclaw.cn/releases';
 let currentChannel = 'stable';
 
 function getPlatform() {
@@ -780,8 +780,10 @@ function isPackclawClient() {
 async function fetchYml(platform, channel) {
   var filename = getYmlFileName(platform, channel);
   var url = BASE_URL + '/' + filename;
+  console.log('url=>', url);
   try {
     var resp = await fetch(url, { cache: 'no-store' });
+    console.log('resp=>', resp);
     if (!resp.ok) return null;
     var text = await resp.text();
     return parseYml(text);
