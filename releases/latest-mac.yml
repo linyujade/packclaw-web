@@ -1,9 +1,9 @@
-version: 1.0.1
+version: 1.0.11
 files:
-  - url: PackClaw-1.0.1-arm64-mac.zip
-    sha512: /gtylQfwY7Vi8O4ctOHkuOiCnQQzXSRmQ7/mn4DGIphXHF4hYZui222k7fdqq1I84NSlURPJfjyHhzSGwp9SBw==
-    size: 351237587
-  - url: PackClaw-1.0.1-x64-mac.zip
-    sha512: sIhJFF1LHW4crJ/6fk6KaXvp4vrD0WPOQDqTzK0Lg1dOTKv/tx8RSnAlKE3p19ErR4Ni1NGcodrCnUSMGbNwJw==
-    size: 327114251
-releaseDate: '2026-06-04'
+  - url: PackClaw-1.0.11-arm64-mac.zip
+    sha512: lrXp7zENvXIS9DrAGRt8We0iAuGsG/pD/lw3WNBdQQj7yeOZp0/8EaMOm/F6juadfqHCQYY+CFHtSDNtnf2V8w==
+    size: 350488084
+  - url: PackClaw-1.0.11-x64-mac.zip
+    sha512: i7wgUXR/2H/ryXKl+BELvFhuEEmwFXa5MYfKmwWN1j2n1YwAkHEii1Zs+yBEH0oK15iEKezMLT29JjJHzv7m3g==
+    size: 326345645
+releaseDate: '2026-06-08'

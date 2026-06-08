@@ -22,7 +22,7 @@ Static marketing and documentation site for PackClaw (an OpenClaw installer). No
 - **Two separate style systems:** Landing page (`index.html`) uses inline `<style>` with its own CSS variables (`--bg`, `--accent`, etc.). `docs/` pages import `style.css` which uses a different set of variables (`--bg-deep`, `--coral-bright`, etc.). Keep them consistent where they overlap but do not assume they share the same token names.
 - **Language:** All user-facing text is in simplified Chinese (`lang="zh-CN"`).
 - **Cross-linking:** `docs/` pages link to `../index.html` and `../style.css` (relative paths). `index.html` nav links to `docs/index.html`.
-- **Download links** in `index.html` point to `downloads/` paths — these are not present in the repo; they are served externally or from a different deployment step.
+- **Download links** in `index.html` point to `releases/` paths — these are not present in the repo; they are served externally or from a different deployment step.
 
 ## Editing tips
 

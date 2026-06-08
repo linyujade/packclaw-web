@@ -101,9 +101,7 @@ nav {
 }
 
 .logo-icon {
-  width: 32px; height: 32px;
-  background: linear-gradient(135deg, var(--accent), var(--cyan));
-  border-radius: 8px;
+  width: 40px; height: 40px;
   display: flex; align-items: center; justify-content: center;
   font-size: 16px;
   box-shadow: 0 0 20px rgba(59,130,246,0.4);
@@ -910,14 +908,13 @@ footer {
 <!-- NAV -->
 <nav>
   <a href="#" class="logo">
-    <div class="logo-icon">🦞</div>
+    <div class="logo-icon"><img src="assets/critter-128.png" alt="PackClaw" style="width:40px;height:40px;"></div>
     PackClaw
   </a>
   <ul>
     <li><a href="#features">功能</a></li>
     <li><a href="#scenarios">使用场景</a></li>
     <li><a href="#download">下载</a></li>
-    <li><a href="releases/">更新日志</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="docs/index.html">文档</a></li>
     <li><a href="#download" class="nav-cta">免费下载</a></li>
@@ -1108,7 +1105,7 @@ footer {
     <div class="compare-row header">
       <div class="compare-cell">对比项</div>
       <div class="compare-cell">手动安装 OpenClaw</div>
-      <div class="compare-cell">🦞 PackClaw（推荐）</div>
+      <div class="compare-cell"><img src="assets/critter-128.png" alt="" style="width:20px;height:20px;vertical-align:middle;"> PackClaw（推荐）</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell" style="color:var(--text2)">安装难度</div>
@@ -1250,19 +1247,19 @@ footer {
       <p class="download-sub">内置免费额度，无需信用卡，无需 API Key</p>
 
       <div class="download-buttons">
-        <a href="downloads/darwin-arm64/PackClaw-arm64.dmg" class="dl-btn" id="dl-mac-arm64">
+        <a href="releases/PackClaw-1.0.11-arm64.dmg" class="dl-btn" id="dl-mac-arm64">
           <div class="dl-btn-os"> macOS</div>
           <div class="dl-btn-desc">Apple Silicon M1/M2/M3/M4 · DMG</div>
         </a>
-        <a href="downloads/darwin-x64/PackClaw-1.0.0-x64.dmg" class="dl-btn" id="dl-mac-x64">
+        <a href="releases/PackClaw-1.0.11-x64.dmg" class="dl-btn" id="dl-mac-x64">
           <div class="dl-btn-os"> macOS Intel</div>
           <div class="dl-btn-desc">Intel Mac 2020 及更早 · DMG</div>
         </a>
-        <a href="downloads/win32-x64/PackClaw-Setup-1.0.0-x64.exe" class="dl-btn" id="dl-win-x64">
+        <a href="releases/PackClaw-Setup-1.0.11-x64.exe" class="dl-btn" id="dl-win-x64">
           <div class="dl-btn-os"> Windows x64</div>
           <div class="dl-btn-desc">Intel / AMD 64位 · EXE</div>
         </a>
-        <a href="downloads/win32-arm64/PackClaw-Setup-1.0.0-arm64.exe" class="dl-btn" id="dl-win-arm64">
+        <a href="releases/PackClaw-Setup-1.0.11-arm64.exe" class="dl-btn" id="dl-win-arm64">
           <div class="dl-btn-os"> Windows ARM</div>
           <div class="dl-btn-desc">Snapdragon X 系列 · EXE</div>
         </a>

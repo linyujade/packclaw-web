@@ -1,9 +1,7 @@
-version: 1.0.1
+version: 1.0.11
 files:
-  - url: PackClaw-Setup-1.0.1-x64.exe
-    sha512: h3Db+DcO2vyWSdoVCHl7D7Lw2AJ4ZIxGhxeYxhyOEyOvhSdyo9jjvOz1PbJ9ZpCUgh4HPV1TPMw+E9GazwIWEg==
-    size: 232380976
-  - url: PackClaw-Setup-1.0.1-arm64.exe
-    sha512: cNMpCLXFippNt5GP5qzypxRHSJi5wxuL0lY3s1+CGA3yzHeB1MmBAXJI8f4++4verHAol1augEktaCuQzZu6ug==
-    size: 208803005
-releaseDate: '2026-06-04'
+  - url: PackClaw-Setup-1.0.11-x64.exe
+    sha512: M8uxfH5U4W4nsauSuNM8HrkIxjIRKT0glIjFlbbaX6KJ+03EciYkf79T390pW0bnlPbw60ehfcWslAu4WxaxiA==
+  - url: PackClaw-Setup-1.0.11-arm64.exe
+    sha512: gGP9q2Y938AFfH5X/YRGsfpWuY0QK3pL1f4EIftlulSWb2Pc5lZceY3NKEfmBisXMqumtcNiFGx+QP8FiuCrQA==
+releaseDate: '2026-06-08'
